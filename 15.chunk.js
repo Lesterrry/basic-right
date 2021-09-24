@@ -2,7 +2,8 @@
 
 
 // *** BASIC RIGHT EDITIONS START ***
-const BASIC_RIGHT_KEY = "Alpha";
+const BASIC_RIGHT_ENCRYPTION_KEY = "Alpha";
+const BASIC_RIGHT_STRING_FLAG = "<BR>";
 // *** BASIC RIGHT EDITIONS END ***
 
 (this.webpackJsonp = this.webpackJsonp || []).push([[15], {
@@ -14601,14 +14602,12 @@ const BASIC_RIGHT_KEY = "Alpha";
             {
                 // *** BASIC RIGHT EDITIONS START ***
                 try {
-                    if (e.message.includes("<BR>")) {
-                        e.message = e.message.substr(4);
-                        console.log(e.message);
+                    if (e.message.substring(0, 4) == BASIC_RIGHT_STRING_FLAG) {
+                        e.message = e.message.substring(4);
                         try {
-                            e.message = CryptoJS.AES.decrypt(e.message, BASIC_RIGHT_KEY).toString(CryptoJS.enc.Utf8);
-                            console.log(e.message);
-                        } catch {
-                            e.message = "BR: Decryption error"
+                            e.message = "🔓" + CryptoJS.AES.decrypt(e.message, BASIC_RIGHT_ENCRYPTION_KEY).toString(CryptoJS.enc.Utf8);
+                        } catch (e) {
+                            this.log.error("BR decryption error: ", e);
                         }
                     }
                     return this.renderMessage(e, t, s, i, n)
@@ -17550,9 +17549,10 @@ const BASIC_RIGHT_KEY = "Alpha";
                 const {value: text, entities: s} = Object(ea.a)(this.messageInputField.input);
                 var t = "";
                 try {
-                    t = "<BR>" + CryptoJS.AES.encrypt(text, BASIC_RIGHT_KEY).toString();
+                    t = BASIC_RIGHT_STRING_FLAG + CryptoJS.AES.encrypt(text, BASIC_RIGHT_ENCRYPTION_KEY).toString();
                 } catch {
-                    t = "BR: Encryption error";    
+                    t = "BR: encryption error";
+                    this.log.error("BR encryption error: ", e);
                 }
                 // *** BASIC RIGHT EDITIONS END ***
                 if (this.editMsgId) {
